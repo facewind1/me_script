@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# 检查参数数量
+if [ $# -lt 1 ]; then
+    echo "用法: fj [源文件]"
+    exit 1
+fi
+
+# 获取参数并获取源文件的绝对路径
+source_file=$(realpath "$1")
+
+# SQLite 数据库文件
+db_file="/Users/wangyuankai/.bin/compile_records.db"
+
+# 查找对应的可执行文件
+executable=$(sqlite3 "$db_file" "SELECT executable FROM records WHERE source_file='$source_file';")
+if [ -n "$executable" ]; then
+    echo "执行可执行文件: $executable"
+    "$executable"
+else
+    echo "未找到与 $source_file 对应的可执行文件，请先使用 gco 编译。"
+fi
+
