@@ -63,11 +63,18 @@ done
 
 # 查找 MariaDB 头文件和库路径
 find_mariadb_paths() {
-    local base_paths="/opt/homebrew/opt/mariadb-connector-c"
-    if [ -d "$base/include/mariadb" ] && [ -d "$base/lib" ]; then
-        echo "$base"
-        return
-    fi
+    local base_paths=(
+        "/usr"
+        "/usr/local"
+        "/usr/lib/x86_64-linux-gnu"
+    )
+    
+    for base in "${base_paths[@]}"; do
+        if [ -d "$base/include/mariadb" ] && [ -d "$base/lib" ]; then
+            echo "$base"
+            return
+        fi
+    done
 }
 
 # 处理 -m 选项
